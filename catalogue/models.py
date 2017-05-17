@@ -1,11 +1,12 @@
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Category(MPTTModel, TimeStampedModel):
