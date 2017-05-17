@@ -1,3 +1,4 @@
 .idea/
 *.pyc
 static/bower_components/*
+media/*
