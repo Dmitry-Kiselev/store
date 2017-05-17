@@ -1,10 +1,11 @@
 from django.views.generic.edit import CreateView, UpdateView
 
+from conf.views import SiteInfoContextMixin
 from .forms import UserCreationForm
 from .models import User
 
 
-class UserCreationView(CreateView):
+class UserCreationView(SiteInfoContextMixin, CreateView):
     model = User
     form_class = UserCreationForm
     context_object_name = 'form'
@@ -12,7 +13,7 @@ class UserCreationView(CreateView):
     template_name = 'users/sign_up.html'
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(SiteInfoContextMixin, UpdateView):
     template_name = 'users/profile.html'
     model = User
     success_url = '/'
