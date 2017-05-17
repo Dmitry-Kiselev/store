@@ -32,7 +32,12 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/">{{ company_name|default:"Store" }}</a>
+
                 </div>
+
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+            </ul>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse"
@@ -45,6 +50,7 @@
                         <button type="submit" class="btn btn-default">Submit
                         </button>
                     </form>
+
                     <ul class="nav navbar-nav navbar-right">
                         {% if request.user.is_authenticated %}
                             <li class="dropdown">
@@ -73,9 +79,9 @@
     {% endblock %}
 </div>
 
-
 <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
 {% block extrajs %}
 {% endblock %}
 </body>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Catalogue{% endblock %}
+
+{% block extrastyle %}
+    <link href="{% static 'css/catalogue_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="well well-sm">
+        {% if category %}
+            <h2>Category Title</h2>
+        {% else %}
+            <h2>Catalogue</h2>
+        {% endif %}
+    </div>
+
+
+    <div id="products" class="row list-group">
+        {% for product in products %}
+            {% include 'catalogue/product_box.html' %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/catalogue_script.js' %}"></script>
+{% endblock %}
