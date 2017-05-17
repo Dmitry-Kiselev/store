@@ -4,6 +4,7 @@ from django.db.models import QuerySet
 from basket.models import Basket
 from catalogue.models import TimeStampedModel
 from django.utils import timezone
+from django.conf import settings
 
 
 class Order(TimeStampedModel):
@@ -47,7 +48,7 @@ class DiscountQuerySet(QuerySet):
 
 
 class Discount(models.Model):
-    owner = models.ForeignKey('users.User', on_delete=models.CASCADE,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                               related_name='discounts')
     value = models.DecimalField(max_digits=6, decimal_places=2)
     in_percent = models.BooleanField(default=False)

@@ -1,14 +1,15 @@
+from django.conf import settings
 from django.db import models
 
 from catalogue.models import Product
 
 
 class Basket(models.Model):
-    user = models.ForeignKey('users.User')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     is_submitted = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'Baster {}'.format(self.user.username)
+        return 'Basket {}'.format(self.user.username)
 
     @property
     def total_price(self):
