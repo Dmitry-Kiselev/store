@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from django.utils import timezone
@@ -33,5 +34,13 @@ class Product(TimeStampedModel):
     num_in_stock = models.IntegerField()
     image = models.ImageField(upload_to='products', blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.name
+
+
+class ExtraImage(models.Model):
+    product = models.ForeignKey(Product, related_name='extra_images')
+    image = models.ImageField(upload_to='products', blank=True, null=True)
