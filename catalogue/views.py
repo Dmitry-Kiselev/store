@@ -1,5 +1,6 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 from catalogue.models import Product, Category
 from conf.views import SiteInfoContextMixin
@@ -21,3 +22,9 @@ class ProductListView(SiteInfoContextMixin, ListView):
     paginate_by = 12
     context_object_name = 'products'
     model = Product
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    context_object_name = 'product'
+    template_name = 'catalogue/product_detail.html'
