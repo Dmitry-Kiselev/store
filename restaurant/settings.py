@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'users',
     'conf',
     'catalogue',
+    'basket',
+    'order',
 
 
 ]
