@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Main page{% endblock %}
+
+{% block content %}<h1>Main</h1>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="{% static 'img/1.jpg' %}" alt="">
+            </div>
+
+            <div class="item">
+                <img src="{% static 'img/2.jpg' %}" alt="">
+            </div>
+
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <h3>Top Products</h3>
+        <div class="w3l_fresh_vegetables_grids">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-stacked">
+                    {% for category in categories %}
+                        <li role="presentation" class=""><a
+                                href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+            <div class="col-md-9 w3l_fresh_vegetables_grid_right">
+                {% for product in products %}
+                    <div class="col-md-4 w3l_fresh_vegetables_grid">
+                        <div class="w3l_fresh_vegetables_grid1">
+                            <img src="{{ product.image.url }}" alt=" "
+                                 class="img-responsive">
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="clearfix"></div>
+                <div class="agileinfo_move_text">
+                    <div class="agileinfo_marquee">
+                        <h4>get <span class="blink_me">25% off</span> on first
+                            order and also get gift voucher</h4>
+                    </div>
+                    <div class="agileinfo_breaking_news">
+                        <span> </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
