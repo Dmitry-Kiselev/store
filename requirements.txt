@@ -1,12 +1,16 @@
 appdirs==1.4.3
 Django==1.11.1
 django-bootstrap-form==3.2.1
+django-extra-views==0.9.0
 django-mptt==0.8.7
+django-redis-cache==1.7.1
 django-solo==1.1.2
+django-widget-tweaks==1.4.1
 olefile==0.44
 packaging==16.8
 Pillow==4.1.1
 psycopg2==2.7.1
 pyparsing==2.2.0
 pytz==2017.2
+redis==2.10.5
 six==1.10.0
