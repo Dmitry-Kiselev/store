@@ -11,7 +11,8 @@
 
 {% block content %}
     <h1>BASKET</h1>
-    {% block basket_form_main %}
+    {% if formset|length %}
+        {% block basket_form_main %}
         <form action="." method="post" class="basket_summary"
               id="basket_formset">
             {% csrf_token %}
@@ -76,6 +77,10 @@
         </form>
         <a class="btn-lg btn-success checkout-btn pull-right" href="#">Checkout</a>
     {% endblock %}
+    {% else %}
+        <h1>Empty</h1>
+    {% endif %}
+
 
 {% endblock %}
 
