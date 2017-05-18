@@ -7,3 +7,9 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+.checkout-btn {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+}
