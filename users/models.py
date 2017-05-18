@@ -9,7 +9,10 @@ class User(AbstractUser):
     address = models.CharField(max_length=120, verbose_name='Address')
 
     def has_discount(self):
-        return self.discounts.get_active_discounts.exists()
+        return self.discounts.get_active_discounts().exists()
+
+    def get_discount(self):
+        return self.discounts.get_active_discounts().first()
 
     @property
     def basket(self):
