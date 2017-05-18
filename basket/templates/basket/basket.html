@@ -16,7 +16,7 @@
               id="basket_formset">
             {% csrf_token %}
             {{ formset.management_form }}
-            <ul class="list-group">
+            <ul class="list-group" id="content_inner">
                 {% for form in formset %}
                     {% with line=form.instance product=form.instance.product %}
                         <li class="basket-items list-group-item">
@@ -31,6 +31,7 @@
                                         </a>
                                     {% endwith %}
                                 </div>
+                            <div class="col-sm-3">{{ product.name }}</div>
                                 <div class="col-sm-5">
                                     <div class="checkout-quantity col-sm-9">
                                         <div class="input-group  {% if form.errors %}error{% endif %}">
@@ -50,7 +51,6 @@
                                                 aria-hidden="true"
                                                 style="display: inline;"></span></a>
                                         <div style="display:none">
-                                            {{ form.save_for_later }}
                                             {{ form.DELETE }}
                                         </div>
                                         {% for field_errors in form.errors.values %}
@@ -77,4 +77,8 @@
         </form>
     {% endblock %}
 
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/basket_script.js' %}"></script>
 {% endblock %}

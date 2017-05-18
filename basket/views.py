@@ -27,7 +27,7 @@ class BasketView(ModelFormSetView):
     formset_class = BasketLineFormSet
     form_class = LineForm
     extra = 0
-    can_delete = False
+    can_delete = True
     template_name = 'basket/basket.html'
 
     def get_queryset(self):
