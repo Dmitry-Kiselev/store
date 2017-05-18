@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'mptt',
     'solo',
     'bootstrapform',
+    'extra_views',
+    'widget_tweaks',
 
     'users',
     'conf',

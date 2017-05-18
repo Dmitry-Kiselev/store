@@ -1,0 +1,9 @@
+.thumb{
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 20px;
+}

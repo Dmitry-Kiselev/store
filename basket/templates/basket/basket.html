@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Basket{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/basket_style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>BASKET</h1>
+    {% block basket_form_main %}
+        <form action="." method="post" class="basket_summary"
+              id="basket_formset">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <ul class="list-group">
+                {% for form in formset %}
+                    {% with line=form.instance product=form.instance.product %}
+                        <li class="basket-items list-group-item">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    {{ form.id }}
+                                    {% with image=product.image %}
+                                        <a href="{{ product.get_absolute_url }}">
+                                            <img class="thumbnail thumb"
+                                                 src="{{ image.url }}"
+                                                 alt="{{ product.name }}"/>
+                                        </a>
+                                    {% endwith %}
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="checkout-quantity col-sm-9">
+                                        <div class="input-group  {% if form.errors %}error{% endif %}">
+                                            {% render_field form.quantity class+="form-control" %}
+                                            <span class="input-group-btn">
+                                        <button class="btn btn-default"
+                                                type="submit">Update</button>
+                                    </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a href="#"
+                                           data-id="{{ forloop.counter0 }}"
+                                           data-behaviours="remove"
+                                           class="inline"> <span
+                                                class="glyphicon glyphicon-remove"
+                                                aria-hidden="true"
+                                                style="display: inline;"></span></a>
+                                        <div style="display:none">
+                                            {{ form.save_for_later }}
+                                            {{ form.DELETE }}
+                                        </div>
+                                        {% for field_errors in form.errors.values %}
+                                            {% for error in field_errors %}
+                                                <span class="error-block"><i
+                                                        class="icon-exclamation-sign"></i> {{ error }}</span>
+                                            {% endfor %}
+
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-1">
+                                    <p class="price align-right text-success">
+                                        {{ line.line_price }}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+
+        </form>
+    {% endblock %}
+
+{% endblock %}

@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from .views import BasketAddView
+from .views import BasketAddView, BasketView
 
 urlpatterns = [
     url(r'^add/$', BasketAddView.as_view(), name='basket_add'),
+    url('^basket/$', BasketView.as_view(), name='basket_index')
 ]

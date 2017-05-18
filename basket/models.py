@@ -15,6 +15,9 @@ class Basket(models.Model):
     def total_price(self):
         return sum([line.line_price for line in self.lines.all()])
 
+    def all_lines(self):
+        return self.lines.all()
+
 
 class Line(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

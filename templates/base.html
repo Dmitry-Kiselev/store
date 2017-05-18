@@ -60,6 +60,7 @@
                                    aria-expanded="false">{{ request.user.username }}
                                     <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
+                                    <li><a href="{% url 'basket_index' %}">Basket</a></li>
                                     <li><a href="{% url 'edit_profile' %}">Edit
                                         profile</a></li>
                                     <li><a href="{% url 'logout' %}">Logout</a>
