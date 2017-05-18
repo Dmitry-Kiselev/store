@@ -125,6 +125,8 @@ class Payment(models.Model):
             return False
 
         self.charge_id = response.stripe_id
+        self.order.status = Order.ORDER_STATUS.PROCESSING
+        self.order.save()
         self.save()
 
         return True
