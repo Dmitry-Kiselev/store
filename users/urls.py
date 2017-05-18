@@ -18,7 +18,7 @@ from .views import UserCreationView, UserUpdateView
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    url(r'^sing_up/', UserCreationView.as_view(), name='sing_up'),
+    url(r'^sing_up/', UserCreationView.as_view(), name='sign_up'),
     url(r'^login/',
         LoginView.as_view(template_name='users/sign_up.html', success_url='/'),
         name='login'),
