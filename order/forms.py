@@ -8,7 +8,8 @@ from .models import Payment
 
 class PaymentForm(forms.Form):
     number = forms.CharField(required=True, label="Card Number")
-    expiration = forms.CharField(required=True, label="Expiration")
+    expiration_month = forms.CharField(required=True, label="Expiration month")
+    expiration_year = forms.CharField(required=True, label="Expiration year")
     cvc = forms.IntegerField(required=True, label="CCV Number",
                              max_value=9999,
                              widget=forms.TextInput(attrs={'size': '4'}))

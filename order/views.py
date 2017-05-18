@@ -18,8 +18,8 @@ class OrderCreate(FormView):
         basket.save()
 
         number = form.cleaned_data["number"]
-        exp_month = form.cleaned_data["expiration"][:2]
-        exp_year = form.cleaned_data["expiration"][2:]
+        exp_month = form.cleaned_data["expiration_month"]
+        exp_year = form.cleaned_data["expiration_year"]
         cvc = form.cleaned_data["cvc"]
         payment = Payment.objects.create(order=order)
         payment.charge(number, exp_month, exp_year, cvc)

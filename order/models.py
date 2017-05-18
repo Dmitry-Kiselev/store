@@ -110,7 +110,7 @@ class Payment(models.Model):
 
         try:
             response = self.stripe.Charge.create(
-                amount=int(self.charged_sum * 1000),
+                amount=int(self.charged_sum * 100),
                 currency="uah",
                 card={
                     "number": number,
