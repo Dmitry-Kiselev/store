@@ -18,6 +18,7 @@ class Basket(models.Model):
     def total_price(self):
         return sum([line.line_price for line in self.lines.all()])
 
+    @property
     def total_price_inc_discount(self):
         if not self.user.has_discount():
             return self.total_price
@@ -28,6 +29,9 @@ class Basket(models.Model):
             return self.total_price * ((100 - discount.value) / 100)
         else:
             return self.total_price - discount.value
+
+    def submit(self):
+        self.is_submitted = True
 
     def all_lines(self):
         return self.lines.all()

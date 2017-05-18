@@ -80,7 +80,7 @@
                 <p>Total inc discount: {{ request.user.basket.total_price_inc_discount }}</p>
             </div>
             </div>
-        <a class="btn-lg btn-success checkout-btn pull-right" href="#">Checkout</a>
+        <a class="btn-lg btn-success checkout-btn pull-right" href="{% url 'checkout' %}">Checkout</a>
     {% endblock %}
 
 

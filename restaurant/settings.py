@@ -158,3 +158,5 @@ CACHES = {
         'LOCATION': 'localhost:6379',
     },
 }
+STRIPE_API_KEY = 'sk_test_kdrKohTAdfuCZgqCRO8ctkzL'
+

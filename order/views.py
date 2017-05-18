@@ -1,3 +1,29 @@
-from django.shortcuts import render
+from django.views.generic.edit import FormView
+from .models import Order, Payment
+from .forms import PaymentForm
+from django.shortcuts import redirect
 
-# Create your views here.
+class OrderCreate(FormView):
+    form_class = PaymentForm
+    template_name = 'order/checkout.html'
+    success_url = '/'
+
+
+    def form_valid(self, form):
+        result = super(OrderCreate, self).form_valid(form)
+        basket = self.request.user.basket
+        discount = self.request.user.get_discount()
+        order = Order.objects.create(basket=basket, discount=discount)
+
+        number = form.cleaned_data["number"]
+        exp_month = form.cleaned_data["expiration"][:2]
+        exp_year = form.cleaned_data["expiration"][2:]
+        cvc = form.cleaned_data["cvc"]
+        payment = Payment(order=order)
+        success = payment.charge(number, exp_month, exp_year, cvc)
+        basket.submit()
+        if success:
+            return result
+        else:
+            return result
+
