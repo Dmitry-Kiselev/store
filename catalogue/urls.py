@@ -19,6 +19,8 @@ from .views import IndexTemplateView, ProductListView, ProductDetailView
 urlpatterns = [
     url(r'^$', IndexTemplateView.as_view(), name='index'),
     url(r'^catalogue/$', ProductListView.as_view(), name='catalogue'),
+    url(r'^catalogue/(?P<category>\d+)$', ProductListView.as_view(),
+        name='catalogue'),
     url(r'^product/(?P<pk>\d+)', ProductDetailView.as_view(),
         name='product_detail'),
 ]

@@ -20,6 +20,9 @@ class Category(MPTTModel, TimeStampedModel):
                             related_name='children', db_index=True)
     image = models.ImageField(upload_to='categories', blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('catalogue', kwargs={'category': self.pk})
+
     def __str__(self):
         return self.name
 

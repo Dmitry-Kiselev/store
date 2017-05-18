@@ -23,6 +23,12 @@ class ProductListView(SiteInfoContextMixin, ListView):
     context_object_name = 'products'
     model = Product
 
+    def get_queryset(self):
+        qs = super(ProductListView, self).get_queryset()
+        if self.kwargs.get('category'):
+            qs = qs.filter(product_category__pk=self.kwargs.get('category'))
+        return qs
+
 
 class ProductDetailView(DetailView):
     model = Product
