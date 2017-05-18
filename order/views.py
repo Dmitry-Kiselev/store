@@ -1,7 +1,7 @@
 from django.views.generic.edit import FormView
 from .models import Order, Payment
 from .forms import PaymentForm
-from django.shortcuts import redirect
+
 
 class OrderCreate(FormView):
     form_class = PaymentForm
@@ -14,16 +14,14 @@ class OrderCreate(FormView):
         basket = self.request.user.basket
         discount = self.request.user.get_discount()
         order = Order.objects.create(basket=basket, discount=discount)
+        basket.submit()
+        basket.save()
 
         number = form.cleaned_data["number"]
         exp_month = form.cleaned_data["expiration"][:2]
         exp_year = form.cleaned_data["expiration"][2:]
         cvc = form.cleaned_data["cvc"]
-        payment = Payment(order=order)
-        success = payment.charge(number, exp_month, exp_year, cvc)
-        basket.submit()
-        if success:
-            return result
-        else:
-            return result
+        payment = Payment.objects.create(order=order)
+        payment.charge(number, exp_month, exp_year, cvc)
+        return result
 
