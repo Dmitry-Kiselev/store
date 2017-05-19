@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import QuerySet
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 from basket.models import Basket
@@ -38,7 +40,7 @@ class Order(TimeStampedModel):
 
         if self.discount.in_percent:
             return self.basket.total_price * (
-            (100 - self.discount.value) / 100) + shipping_price
+                (100 - self.discount.value) / 100) + shipping_price
         else:
             return self.basket.total_price - self.discount.value + shipping_price
 
@@ -57,7 +59,8 @@ class Order(TimeStampedModel):
 class DiscountQuerySet(QuerySet):
     def get_active_discounts(self):
         now = timezone.now()
-        return self.filter(available_from__lte=now, available_until__gte=now)
+        return self.filter(available_from__lte=now, available_until__gte=now,
+                           is_used=False)
 
 
 class Discount(models.Model):
@@ -76,5 +79,16 @@ class Discount(models.Model):
         now = timezone.now()
         return self.available_from >= now and self.available_until <= now
 
+    def mark_as_used(self):
+        self.is_used = True
+
     def __str__(self):
         return '{} {}'.format(self.value, self.owner.username)
+
+
+@receiver(post_save, sender=Order)
+def on_order_save(sender, instance, created, **kwargs):
+    if created and instance.discount:
+        instance.discount.mark_as_used()
+        instance.discount.save()
+        instance.save()
