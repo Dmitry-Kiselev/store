@@ -5,6 +5,7 @@ from catalogue.models import Product
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
+from redis.exceptions import ConnectionError
 
 
 class Basket(models.Model):
@@ -51,12 +52,18 @@ class Line(models.Model):
 @receiver(post_save, sender=Line)
 def update_lines_count_in_cache_on_save(sender, instance, created, **kwargs):
     count = instance.basket.all_lines().count()
-    cache.set('basket_%s' % instance.basket.pk,
-              count, None)
+    try:
+        cache.set('basket_%s' % instance.basket.pk,
+                  count, None)
+    except ConnectionError:
+        pass
 
 
 @receiver(post_delete, sender=Line)
 def update_lines_count_in_cache_on_delete(sender, instance, **kwargs):
     count = instance.basket.all_lines().count()
-    cache.set('basket_%s' % instance.basket.pk,
-              count, None)
+    try:
+        cache.set('basket_%s' % instance.basket.pk,
+                  count, None)
+    except ConnectionError:
+        pass
