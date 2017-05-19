@@ -49,21 +49,12 @@ class Line(models.Model):
         return self.product.price * self.quantity
 
 
-@receiver(post_save, sender=Line)
-def update_lines_count_in_cache_on_save(sender, instance, created, **kwargs):
-    count = instance.basket.all_lines().count()
-    try:
-        cache.set('basket_%s' % instance.basket.pk,
-                  count, None)
-    except ConnectionError:
-        pass
-
-
 @receiver(post_delete, sender=Line)
-def update_lines_count_in_cache_on_delete(sender, instance, **kwargs):
+@receiver(post_save, sender=Line)
+def update_lines_count_in_cache(sender, instance, created=None, **kwargs):
     count = instance.basket.all_lines().count()
     try:
-        cache.set('basket_%s' % instance.basket.pk,
+        cache.set('basket_{}'.format(instance.basket.pk),
                   count, None)
     except ConnectionError:
         pass
