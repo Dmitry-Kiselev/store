@@ -32,13 +32,15 @@ class Order(TimeStampedModel):
 
     @property
     def total_price(self):
+        shipping_price = self.basket.shipping_price
         if not self.discount:
-            return self.basket.total_price
+            return self.basket.total_price + shipping_price
 
         if self.discount.in_percent:
-            return self.basket.total_price * ((100 - self.discount.value) / 100)
+            return self.basket.total_price * (
+            (100 - self.discount.value) / 100) + shipping_price
         else:
-            return self.basket.total_price - self.discount.value
+            return self.basket.total_price - self.discount.value + shipping_price
 
     @property
     def get_discount_val(self):
@@ -55,7 +57,7 @@ class Order(TimeStampedModel):
 class DiscountQuerySet(QuerySet):
     def get_active_discounts(self):
         now = timezone.now()
-        return self.filter(available_from__gte=now, available_until__lte=now)
+        return self.filter(available_from__lte=now, available_until__gte=now)
 
 
 class Discount(models.Model):

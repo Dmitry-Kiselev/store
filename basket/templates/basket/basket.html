@@ -78,6 +78,9 @@
             <div class="col-sm-12 col-md-4">
                 <p>Total: {{ request.user.basket.total_price }}</p>
                 <p>Total inc discount: {{ request.user.basket.total_price_inc_discount }}</p>
+                <p>Shipping: {{ request.user.basket.shipping_price|floatformat:"2"|default:"Free!" }}</p>
+                <br>
+                <p>Total: {{ request.user.basket.total_incl_discount_incl_shipping|floatformat:"2" }}</p>
             </div>
             </div>
         <a class="btn-lg btn-success checkout-btn pull-right" href="{% url 'checkout' %}">Checkout</a>

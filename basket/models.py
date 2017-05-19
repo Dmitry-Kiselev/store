@@ -6,6 +6,8 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
 from redis.exceptions import ConnectionError
+from conf.models import SiteConfig
+from decimal import Decimal
 
 
 class Basket(models.Model):
@@ -36,6 +38,22 @@ class Basket(models.Model):
 
     def all_lines(self):
         return self.lines.all()
+
+    @property
+    def shipping_price(self):
+        conf = SiteConfig.get_solo()
+        if self.total_price_inc_discount > conf.free_shipping_on:
+            return 0  # free shipping
+
+        distance = self.user.distance
+        if distance is None:
+            return conf.fixed_shipping_price  # fixed price
+
+        return Decimal(distance) * conf.shipping_price_per_km
+
+    @property
+    def total_incl_discount_incl_shipping(self):
+        return self.total_price_inc_discount + self.shipping_price
 
 
 class Line(models.Model):
