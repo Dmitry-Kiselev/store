@@ -29,9 +29,11 @@ class Basket(models.Model):
         discount = self.user.get_discount()
 
         if discount.in_percent:
-            return self.total_price * ((100 - discount.value) / 100)
+            price = self.total_price * ((100 - discount.value) / 100)
+            return price if price >= 0 else 0
         else:
-            return self.total_price - discount.value
+            price = self.total_price - discount.value
+            return price if price >= 0 else 0
 
     def submit(self):
         self.is_submitted = True

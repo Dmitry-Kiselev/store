@@ -37,7 +37,7 @@
 
     <div class="container">
         <h3>Top Products</h3>
-        <div class="w3l_fresh_vegetables_grids">
+        <div>
             <div class="col-md-3">
                 <ul class="nav nav-pills nav-stacked">
                     {% for category in categories %}
@@ -58,12 +58,11 @@
                             {% endif %}
                         </a>
 
+                    </div>{% endfor %}
                     </div>
-                    </div>
-                {% endfor %}
+
             <div class="clearfix"></div>
         </div>
         <div class="clearfix"></div>
-    </div>
     </div>
 {% endblock %}
