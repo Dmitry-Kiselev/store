@@ -2,6 +2,8 @@ from django.views.generic.edit import FormView
 from .models import Order
 from .forms import PaymentForm
 from payment.models import Payment
+from django.contrib import messages
+from stripe.error import InvalidRequestError
 
 
 class OrderCreate(FormView):
@@ -23,6 +25,10 @@ class OrderCreate(FormView):
         cvc = form.cleaned_data["cvc"]
         payment_service = Payment.get_payment_service()
         payment = payment_service(order=order)
-        payment.charge(number, exp_month, exp_year, cvc)
-        payment.save()
+        try:
+            payment.charge(number, exp_month, exp_year, cvc)
+            payment.save()
+            messages.success(self.request, 'Success!')
+        except InvalidRequestError as e:
+            messages.error(self.request, str(e))
         return result

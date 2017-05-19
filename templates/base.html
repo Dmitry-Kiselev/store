@@ -31,13 +31,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/">{{ company_name|default:"Store" }}</a>
+                    <a class="navbar-brand"
+                       href="/">{{ company_name|default:"Store" }}</a>
 
                 </div>
 
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
-            </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+                </ul>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse"
@@ -60,7 +61,8 @@
                                    aria-expanded="false">{{ request.user.username }}
                                     <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{% url 'basket_index' %}">Basket ({{ basket_lines_count }})</a></li>
+                                    <li><a href="{% url 'basket_index' %}">Basket
+                                        ({{ basket_lines_count }})</a></li>
                                     <li><a href="{% url 'edit_profile' %}">Edit
                                         profile</a></li>
                                     <li><a href="{% url 'logout' %}">Logout</a>
@@ -75,6 +77,13 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert-info {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endblock %}
     {% block content %}
     {% endblock %}
