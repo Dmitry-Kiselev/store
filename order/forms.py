@@ -16,10 +16,17 @@ class PaymentForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(PaymentForm, self).clean()
-        if cleaned_data['number'] and (
-                        len(cleaned_data['number']) < 13 or len(
-                    cleaned_data['number']) > 16):
+        if not self.validate_card(cleaned_data['number']):
             raise forms.ValidationError("Please enter in a valid " + \
                                         "credit card number.")
 
         return cleaned_data
+
+    def validate_card(self, number):
+        digits = [int(i) for i in str(number)]
+        odd_digits = digits[-1::-2]
+        even_digits = digits[-2::-2]
+        total = sum(odd_digits)
+        for digit in even_digits:
+            total += sum([int(i) for i in str(2 * digit)])
+        return total % 10 == 0
