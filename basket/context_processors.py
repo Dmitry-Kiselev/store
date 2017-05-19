@@ -5,8 +5,11 @@ from redis.exceptions import ConnectionError
 def basket_lines_count(request):
     count = None
     conn_error = False
-    key = request.user.basket.pk
+    key = None
+    if key is None:
+        return {}
     try:
+        key = request.user.basket.pk
         count = cache.get('basket_{}'.format(key))
     except AttributeError:
         count = None
