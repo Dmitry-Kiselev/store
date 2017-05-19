@@ -3,7 +3,7 @@ from calendar import monthrange
 
 from django import forms
 
-from .models import Payment
+from payment.models import Payment
 
 
 class PaymentForm(forms.Form):

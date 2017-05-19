@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'catalogue',
     'basket',
     'order',
+    'payment',
 
 
 ]
@@ -158,5 +159,7 @@ CACHES = {
         'LOCATION': 'localhost:6379',
     },
 }
-STRIPE_API_KEY = 'sk_test_kdrKohTAdfuCZgqCRO8ctkzL'
 
+PAYMENT_SERVICE = 'stripe'
+
+STRIPE_API_KEY = 'sk_test_kdrKohTAdfuCZgqCRO8ctkzL'
