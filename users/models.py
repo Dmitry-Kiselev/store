@@ -7,6 +7,10 @@ from order.models import Discount
 
 class User(AbstractUser):
     address = models.CharField(max_length=120, verbose_name='Address')
+    address_lat = models.FloatField(verbose_name='Latitude', blank=True,
+                                    null=True)
+    address_lng = models.FloatField(verbose_name='Longitude', blank=True,
+                                    null=True)
 
     def has_discount(self):
         return self.discounts.get_active_discounts().exists()
