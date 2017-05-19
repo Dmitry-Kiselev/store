@@ -11,80 +11,89 @@
 
 {% block content %}
     <h1>BASKET</h1>
+    {% if formset|length %}
         {% block basket_form_main %}
-        <form action="." method="post" class="basket_summary"
-              id="basket_formset">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <ul class="list-group" id="content_inner">
-                {% for form in formset %}
-                    {% with line=form.instance product=form.instance.product %}
-                        <li class="basket-items list-group-item">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    {{ form.id }}
-                                    {% with image=product.image %}
-                                        <a href="{{ product.get_absolute_url }}">
-                                            <img class="thumbnail thumb"
-                                                 src="{{ image.url }}"
-                                                 alt="{{ product.name }}"/>
-                                        </a>
-                                    {% endwith %}
-                                </div>
-                            <div class="col-sm-3">{{ product.name }}</div>
-                                <div class="col-sm-5">
-                                    <div class="checkout-quantity col-sm-9">
-                                        <div class="input-group  {% if form.errors %}error{% endif %}">
-                                            {% render_field form.quantity class+="form-control" %}
-                                            <span class="input-group-btn">
+            <form action="." method="post" class="basket_summary"
+                  id="basket_formset">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <ul class="list-group" id="content_inner">
+                    {% for form in formset %}
+                        {% with line=form.instance product=form.instance.product %}
+                            <li class="basket-items list-group-item">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        {{ form.id }}
+                                        {% with image=product.image %}
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <img class="thumbnail thumb"
+                                                     src="{{ image.url }}"
+                                                     alt="{{ product.name }}"/>
+                                            </a>
+                                        {% endwith %}
+                                    </div>
+                                    <div class="col-sm-3">{{ product.name }}</div>
+                                    <div class="col-sm-5">
+                                        <div class="checkout-quantity col-sm-9">
+                                            <div class="input-group  {% if form.errors %}error{% endif %}">
+                                                {% render_field form.quantity class+="form-control" %}
+                                                <span class="input-group-btn">
                                         <button class="btn btn-default"
                                                 type="submit">Update</button>
                                     </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <a href="#"
-                                           data-id="{{ forloop.counter0 }}"
-                                           data-behaviours="remove"
-                                           class="inline"> <span
-                                                class="glyphicon glyphicon-remove"
-                                                aria-hidden="true"
-                                                style="display: inline;"></span></a>
-                                        <div style="display:none">
-                                            {{ form.DELETE }}
-                                        </div>
-                                        {% for field_errors in form.errors.values %}
-                                            {% for error in field_errors %}
-                                                <span class="error-block"><i
-                                                        class="icon-exclamation-sign"></i> {{ error }}</span>
+                                        <div class="col-sm-3">
+                                            <a href="#"
+                                               data-id="{{ forloop.counter0 }}"
+                                               data-behaviours="remove"
+                                               class="inline"> <span
+                                                    class="glyphicon glyphicon-remove"
+                                                    aria-hidden="true"
+                                                    style="display: inline;"></span></a>
+                                            <div style="display:none">
+                                                {{ form.DELETE }}
+                                            </div>
+                                            {% for field_errors in form.errors.values %}
+                                                {% for error in field_errors %}
+                                                    <span class="error-block"><i
+                                                            class="icon-exclamation-sign"></i> {{ error }}</span>
+                                                {% endfor %}
+
                                             {% endfor %}
+                                        </div>
 
-                                        {% endfor %}
                                     </div>
-
+                                    <div class="col-sm-1">
+                                        <p class="price align-right text-success">
+                                            {{ line.line_price }}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="col-sm-1">
-                                    <p class="price align-right text-success">
-                                        {{ line.line_price }}
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                    {% endwith %}
-                {% endfor %}
-            </ul>
-        </form>
+                            </li>
+                        {% endwith %}
+                    {% endfor %}
+                </ul>
+            </form>
             <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <p>Total: {{ request.user.basket.total_price }}</p>
-                <p>Total inc discount: {{ request.user.basket.total_price_inc_discount }}</p>
-                <p>Shipping: {{ request.user.basket.shipping_price|floatformat:"2"|default:"Free!" }}</p>
-                <br>
-                <p>Total: {{ request.user.basket.total_incl_discount_incl_shipping|floatformat:"2" }}</p>
+                <div class="col-sm-12 col-md-4">
+                    <p>Total: {{ request.user.basket.total_price }}</p>
+                    <p>Total inc
+                        discount: {{ request.user.basket.total_price_inc_discount }}</p>
+                    <p>
+                        Shipping: {{ request.user.basket.shipping_price|floatformat:"2"|default:"Free!" }}</p>
+                    <br>
+                    <p>
+                        Total: {{ request.user.basket.total_incl_discount_incl_shipping|floatformat:"2" }}</p>
+                </div>
             </div>
-            </div>
-        <a class="btn-lg btn-success checkout-btn pull-right" href="{% url 'checkout' %}">Checkout</a>
-    {% endblock %}
+            <a class="btn-lg btn-success checkout-btn pull-right"
+               href="{% url 'checkout' %}">Checkout</a>
+        {% endblock %}
+    {% else %}
+        <h3>Empty</h3>
+    {% endif %}
+
 
 
 {% endblock %}
