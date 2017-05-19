@@ -6,7 +6,7 @@ def basket_lines_count(request):
     count = None
     conn_error = False
     key = None
-    if key is None:
+    if not request.user.is_authenticated():
         return {}
     try:
         key = request.user.basket.pk
