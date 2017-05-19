@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
-class BasketAddView(View):
+class BasketAddView(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):
         basket = self.request.user.basket
         product_pk = self.request.POST.get('pk')

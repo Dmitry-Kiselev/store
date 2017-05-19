@@ -42,7 +42,8 @@
                         <form action="{% url 'basket_add' %}" method="post">
                             {% csrf_token %}
                             <input type="text" name="pk" value="{{ product.pk }}" hidden/>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-success"
+                                    {% if not request.user.is_authenticated %}disabled="disabled"{% endif %}>
                             Add to cart
                         </button>
                         </form>
