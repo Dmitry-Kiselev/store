@@ -27,7 +27,7 @@
                                 <div class="form-group">
                                     <label for="cardNumber">CARD NUMBER</label>
                                     <div class="input-group">
-                                        {{ form.number|add_class:"form-control" }}
+                                        {{ form.number|add_class:"form-control"|append_attr:"placeholder:XXXXXXXXXXXXXX" }}
                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                     </div>
                                 </div>
@@ -38,15 +38,15 @@
                                 <div class="form-group">
                                     <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span class="visible-xs-inline">EXP</span> DATE</label>
                                     <div class="input-group row">
-                                        <div class="col-sm-6">{{ form.expiration_month|add_class:"form-control" }}</div>
-                                        <div class="col-sm-6">{{ form.expiration_year|add_class:"form-control" }}</div>
+                                        <div class="col-sm-6">{{ form.expiration_month|add_class:"form-control"|append_attr:"placeholder:XX" }}</div>
+                                        <div class="col-sm-6">{{ form.expiration_year|add_class:"form-control"|append_attr:"placeholder:XXXX" }}</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xs-5 col-md-5 pull-right">
                                 <div class="form-group">
                                     <label for="cardCVC">CV CODE</label>
-                                    {{ form.cvc|add_class:"form-control"|placeholder=form.cvc.label }}
+                                    {{ form.cvc|add_class:"form-control"|append_attr:"placeholder:XXXX" }}
                                 </div>
                             </div>
                         </div>
