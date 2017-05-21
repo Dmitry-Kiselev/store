@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form role="form" id="payment-form" method="POST" action=".">{% csrf_token %}
+                    <form role="form" id="payment-form" method="POST" action="{{ request.path }}">{% csrf_token %}
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group">
@@ -55,7 +55,7 @@
                                 <button class="subscribe btn btn-success btn-lg btn-block" type="submit">Confirm</button>
                             </div>
                         </div>
-                        <div class="row" style="display:none;">
+                        <div class="row hidden">
                             <div class="col-xs-12">
                                 <p class="payment-errors">{{ form.errors }}</p>
                             </div>

@@ -13,7 +13,7 @@
     <h1>BASKET</h1>
     {% if formset|length %}
         {% block basket_form_main %}
-            <form action="." method="post" class="basket_summary"
+            <form action="{{ request.path }}" method="post" class="basket_summary"
                   id="basket_formset">
                 {% csrf_token %}
                 {{ formset.management_form }}
