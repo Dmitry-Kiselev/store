@@ -12,7 +12,7 @@ def basket_lines_count(request):
     try:
         key = request.user.basket.pk
         count = cache.get('basket_{}'.format(key))
-    except (AttributeError, ConnectionError):
+    except (AttributeError, ConnectionError) as e:
         count = request.user.basket.all_lines().count()
         logger = logging.getLogger(__name__)
         logger.error('{} {}: {}'.format(timezone.now(), str(e),
