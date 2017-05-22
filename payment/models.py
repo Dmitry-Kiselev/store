@@ -3,7 +3,6 @@ from django.conf import settings
 from django.db import models
 
 from order.models import Order
-from django.conf import settings
 
 
 class Payment(models.Model):

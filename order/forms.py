@@ -1,9 +1,4 @@
-from datetime import date, datetime
-from calendar import monthrange
-
 from django import forms
-
-from payment.models import Payment
 
 
 class PaymentForm(forms.Form):

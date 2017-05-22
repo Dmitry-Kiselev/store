@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 from catalogue.models import Product, Category
 from conf.views import SiteInfoContextMixin

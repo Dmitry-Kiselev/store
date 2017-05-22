@@ -1,10 +1,11 @@
+from math import sin, cos, sqrt, atan2, radians
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from basket.models import Basket
 from conf.models import SiteConfig
 from order.models import Discount
-from math import sin, cos, sqrt, atan2, radians
 
 
 class User(AbstractUser):

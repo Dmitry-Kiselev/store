@@ -1,13 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponseForbidden
+from django.shortcuts import redirect
 from django.views.generic.base import View
 from extra_views import ModelFormSetView
 
 from catalogue.models import Product
 from .forms import BasketLineFormSet, LineForm
 from .models import Basket, Line
-from django.shortcuts import redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-
 
 
 class BasketAddView(LoginRequiredMixin, View):

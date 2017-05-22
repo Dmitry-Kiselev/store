@@ -1,8 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):

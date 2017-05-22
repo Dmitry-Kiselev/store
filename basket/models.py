@@ -1,13 +1,14 @@
-from django.conf import settings
-from django.db import models
+from decimal import Decimal
 
-from catalogue.models import Product
+from django.conf import settings
+from django.core.cache import cache
+from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.core.cache import cache
 from redis.exceptions import ConnectionError
+
+from catalogue.models import Product
 from conf.models import SiteConfig
-from decimal import Decimal
 
 
 class Basket(models.Model):
