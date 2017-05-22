@@ -1,7 +1,10 @@
+import traceback
 from abc import ABC
 
+import logging
 import stripe
 from django.conf import settings
+from django.utils import timezone
 
 
 class AbstractProvider(ABC):
@@ -36,6 +39,9 @@ class StripeProvider(AbstractProvider):
                 description='Thank you for your purchase!')
 
         except self.stripe.CardError as ce:
+            logger = logging.getLogger(__name__)
+            logger.error('{} {}: {}'.format(timezone.now(), str(ce),
+                                            traceback.format_exc()))
             # charge failed
             return ce
 
