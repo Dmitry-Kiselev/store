@@ -2,5 +2,5 @@
 *.pyc
 static/bower_components/*
 media/*
-log/
+logs/
 local_settings.py

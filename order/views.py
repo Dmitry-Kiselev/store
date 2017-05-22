@@ -1,4 +1,9 @@
+import logging
+import traceback
+
 from django.contrib import messages
+from django.db import IntegrityError, DatabaseError
+from django.utils import timezone
 from django.views.generic.edit import FormView
 from stripe.error import InvalidRequestError
 
@@ -28,8 +33,17 @@ class OrderCreate(FormView):
         payment = payment_service(order=order)
         try:
             payment.charge(number, exp_month, exp_year, cvc)
-            payment.save()
-            messages.success(self.request, 'Success!')
         except InvalidRequestError as e:
-            messages.error(self.request, str(e))
+            logger = logging.getLogger(__name__)
+            logger.error('{} {}: {}'.format(timezone.now(), str(e),
+                                            traceback.format_exc()))
+            messages.error(self.request,
+                           'Some error happened during checkout process. Please, try later ')
+        try:
+            payment.save()
+        except (DatabaseError, IntegrityError) as e:
+            logger = logging.getLogger(__name__)
+            logger.error('{} {}: {}'.format(timezone.now(), str(e),
+                                            traceback.format_exc()))
+        messages.success(self.request, 'Success!')
         return result
