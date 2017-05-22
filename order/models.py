@@ -91,4 +91,3 @@ def on_order_save(sender, instance, created, **kwargs):
     if created and instance.discount:
         instance.discount.mark_as_used()
         instance.discount.save()
-        instance.save()
