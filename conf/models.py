@@ -24,3 +24,6 @@ class SiteConfig(SingletonModel):
     free_shipping_on = models.DecimalField(max_digits=5, decimal_places=2,
                                            default=150.0,
                                            help_text='Provide free shipping for orders with certain total price')
+    admin_email = models.EmailField(
+        verbose_name='email to send notification about some problems with website',
+        blank=True, null=True)

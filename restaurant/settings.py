@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'conf.middleware.AdminNotifyMiddleware',
 ]
 
 ROOT_URLCONF = 'restaurant.urls'
@@ -164,3 +165,12 @@ CACHES = {
 PAYMENT_SERVICE = 'stripe'
 
 STRIPE_API_KEY = 'sk_test_kdrKohTAdfuCZgqCRO8ctkzL'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = 'info@localhost'
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
