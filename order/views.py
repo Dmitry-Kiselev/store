@@ -7,8 +7,9 @@ from django.utils import timezone
 from django.views.generic.edit import FormView
 from stripe.error import InvalidRequestError
 
+from payment.forms import PaymentForm
 from payment.models import Payment
-from .forms import PaymentForm
+from payment.providers import get_payment_provider
 from .models import Order
 
 
@@ -16,6 +17,11 @@ class OrderCreate(FormView):
     form_class = PaymentForm
     template_name = 'order/checkout.html'
     success_url = '/'
+    payment_provider_class = get_payment_provider()
+
+    def __init__(self):
+        super(OrderCreate, self).__init__()
+        self.form_class = PaymentForm
 
     def form_valid(self, form):
         result = super(OrderCreate, self).form_valid(form)
@@ -29,18 +35,19 @@ class OrderCreate(FormView):
         exp_month = form.cleaned_data["expiration_month"]
         exp_year = form.cleaned_data["expiration_year"]
         cvc = form.cleaned_data["cvc"]
-        payment_service = Payment.get_payment_service()
-        payment = payment_service(order=order)
+        provider = self.payment_provider_class()
         try:
-            payment.charge(number, exp_month, exp_year, cvc)
+            charge_id = provider.charge(number, exp_month, exp_year, cvc,
+                                        order.total_price)
         except InvalidRequestError as e:
             logger = logging.getLogger(__name__)
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))
+            charge_id = None
             messages.error(self.request,
                            'Some error happened during checkout process. Please, try later ')
         try:
-            payment.save()
+            Payment.objects.create(charge_id=charge_id, order=order)
         except (DatabaseError, IntegrityError) as e:
             logger = logging.getLogger(__name__)
             logger.error('{} {}: {}'.format(timezone.now(), str(e),

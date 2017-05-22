@@ -9,6 +9,11 @@ class PaymentForm(forms.Form):
                              max_value=9999,
                              widget=forms.TextInput(attrs={'size': '4'}))
 
+    provider = None
+
+    def __init__(self, *args, **kwargs):
+        super(PaymentForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super(PaymentForm, self).clean()
         if not self.validate_card(cleaned_data['number']):
