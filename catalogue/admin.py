@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Product, Category, ExtraImage, ProductRating
+from .models import Product, Category, ExtraImage, ProductRating, \
+    ProductFeedback
 
 
 class ExtraImageAdmin(admin.TabularInline):
@@ -22,3 +23,13 @@ class CategotyAdmin(admin.ModelAdmin):
 @admin.register(ProductRating)
 class ProductRatingAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'updated_at', 'rating']
+
+
+@admin.register(ProductFeedback)
+class ProductFeedbackAdmin(admin.ModelAdmin):
+    list_display = ['created_at', 'updated_at', 'status']
+    readonly_fields = ('answered_by',)
+
+    def save_model(self, request, obj, form, change):
+        obj.answered_by = request.user
+        obj.save()

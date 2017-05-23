@@ -61,3 +61,30 @@ class ProductRating(TimeStampedModel):
                                       null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     rating = models.PositiveSmallIntegerField(null=True, default=5)
+
+
+class ProductFeedback(TimeStampedModel):
+    class FEEDBACK_STATUS:
+        NEW = 0
+        PROCESSING = 1
+        INVALID = 2
+        COMPLETED = 3
+
+        FEEDBACK_CHOICES = (
+            (NEW, 'New'),
+            (PROCESSING, 'Processing'),
+            (INVALID, 'Invalid'),
+            (COMPLETED, 'Completed')
+        )
+
+    feedback_product = models.ForeignKey(Product, related_name='feedback',
+                                null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                             related_name='feedback')
+    feedback = models.TextField()
+    email = models.EmailField(blank=True, null=True)
+    status = models.SmallIntegerField(choices=FEEDBACK_STATUS.FEEDBACK_CHOICES,
+                                      default=FEEDBACK_STATUS.NEW)
+    answer = models.TextField()
+    answered_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                                    blank=True, related_name='feedback_answers')
