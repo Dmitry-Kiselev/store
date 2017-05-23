@@ -31,7 +31,9 @@
 
                 <div class="col-md-7">
                     <div class="col-md-6">
-                        <div class="product-title">{{ product.name }} ({{ product.rating|default_if_none:"0" }}/5)</div>
+                        <div class="product-title">{{ product.name }}
+                            ({{ product.rating|default_if_none:"0" }}/5)
+                        </div>
                         <hr>
                         <div class="product-price">{{ product.price }}</div>
                         {% if product.num_in_stock %}
@@ -54,11 +56,14 @@
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <form id="rating_form" {% if request.user.is_authenticated %}action="{% url 'rating' pk=product.pk %}" method="post"{% endif %}>
-                            {% csrf_token %}
-                            {{ rating_form }}
-                        </form>
-
+                        {% if request.user.is_authenticated %}
+                            <form id="rating_form"
+                                  action="{% url 'rating' pk=product.pk %}"
+                                  method="post">
+                                {% csrf_token %}
+                                {{ rating_form }}
+                            </form>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -75,7 +80,8 @@
                 <form action="{% url 'feedback' pk=product.pk %}" method="post">
                     {% csrf_token %}
                     {{ feedback_form|bootstrap }}
-                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button class="btn btn-primary" type="submit">Submit
+                    </button>
                 </form>
             </div>
         </div>

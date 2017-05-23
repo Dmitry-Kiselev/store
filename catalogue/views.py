@@ -52,7 +52,8 @@ class ProductDetailView(DetailView):
             rating = rating.rating
             context['rating_form'] = ProductRatingForm(
                 initial={'rating': rating})
-        except (Product.DoesNotExist, ProductRating.DoesNotExist):
+        except (Product.DoesNotExist, ProductRating.DoesNotExist,
+                TypeError):  # TypeError for AnonymousUser
             context['rating_form'] = ProductRatingForm()
         if self.request.user.is_authenticated():
             context['feedback_form'] = ProductFeedbackForm(
