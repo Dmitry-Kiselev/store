@@ -73,8 +73,8 @@ class FeedbackView(FormView):
             product = Product.objects.get(pk=self.kwargs.get('pk'))
             if self.request.user.is_authenticated():
                 form.instance.user = self.request.user
-                form.instance.feedback_product = product
-                form.instance.save()
+            form.instance.feedback_product = product
+            form.instance.save()
         except Product.DoesNotExist as e:
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))

@@ -79,7 +79,7 @@ class ProductFeedback(TimeStampedModel):
 
     feedback_product = models.ForeignKey(Product, related_name='feedback',
                                 null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
                              related_name='feedback')
     feedback = models.TextField()
     email = models.EmailField(blank=True, null=True)
