@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from basket.models import Basket
 from catalogue.models import TimeStampedModel
+from .tasks import send_email
 
 
 class Order(TimeStampedModel):
@@ -91,3 +92,9 @@ def on_order_save(sender, instance, created, **kwargs):
     if created and instance.discount:
         instance.discount.mark_as_used()
         instance.discount.save()
+
+
+@receiver(post_save, sender=Order)
+def send_email_to_customer(sender, instance, created, **kwargs):
+    if created:
+        send_email.delay(email=instance.basket.user.email)

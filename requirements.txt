@@ -1,4 +1,7 @@
+amqp==2.1.4
 appdirs==1.4.3
+billiard==3.5.0.2
+celery==4.0.2
 Django==1.11.1
 django-bootstrap-form==3.2.1
 django-extra-views==0.9.0
@@ -6,6 +9,7 @@ django-mptt==0.8.7
 django-redis-cache==1.7.1
 django-solo==1.1.2
 django-widget-tweaks==1.4.1
+kombu==4.0.2
 olefile==0.44
 packaging==16.8
 Pillow==4.1.1
@@ -16,3 +20,4 @@ redis==2.10.5
 requests==0.13.2
 six==1.10.0
 stripe==1.55.2
+vine==1.1.3
