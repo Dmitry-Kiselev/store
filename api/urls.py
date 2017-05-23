@@ -1,8 +1,9 @@
 from django.conf.urls import url, include
-from api.catalogue import views as catalogue_view
 from rest_framework.routers import DefaultRouter
-from api.order import views as order_views
+
 from api.basket import views as basket_views
+from api.catalogue import views as catalogue_view
+from api.order import views as order_views
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()

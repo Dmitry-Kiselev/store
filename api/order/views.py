@@ -1,7 +1,8 @@
-from order.models import Order
-from .serializers import OrderSerializer
 from rest_framework import viewsets
+
+from order.models import Order
 from .permissions import IsOwner
+from .serializers import OrderSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):

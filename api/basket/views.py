@@ -1,7 +1,8 @@
+from rest_framework import viewsets
+
+from api.order.permissions import IsOwner
 from basket.models import Basket, Line
 from .serializers import BasketSerializer, LineSerializer
-from rest_framework import viewsets
-from api.order.permissions import IsOwner
 
 
 class BasketViewSet(viewsets.ModelViewSet):
