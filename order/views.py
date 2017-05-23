@@ -9,7 +9,7 @@ from stripe.error import InvalidRequestError
 
 from payment.forms import PaymentForm
 from payment.models import Payment
-from payment.providers import get_payment_provider
+from payment.providers import PaymentProviders
 from .models import Order
 
 
@@ -17,7 +17,7 @@ class OrderCreate(FormView):
     form_class = PaymentForm
     template_name = 'order/checkout.html'
     success_url = '/'
-    payment_provider_class = get_payment_provider()
+    payment_provider_class = PaymentProviders.get_default_provider()
 
     def __init__(self):
         super(OrderCreate, self).__init__()

@@ -1,18 +1,20 @@
+import logging
 import traceback
 from abc import ABC
 
-import logging
 import stripe
 from django.conf import settings
 from django.utils import timezone
 
 
-class AbstractProvider(ABC):
+logger = logging.getLogger('django')
 
+
+class AbstractProvider(ABC):
     charge_id = None
 
     def charge(self, number, exp_month, exp_year, cvc, charged_sum):
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class StripeProvider(AbstractProvider):
@@ -39,7 +41,6 @@ class StripeProvider(AbstractProvider):
                 description='Thank you for your purchase!')
 
         except self.stripe.CardError as ce:
-            logger = logging.getLogger(__name__)
             logger.error('{} {}: {}'.format(timezone.now(), str(ce),
                                             traceback.format_exc()))
             # charge failed
@@ -49,6 +50,19 @@ class StripeProvider(AbstractProvider):
         return self.charge_id
 
 
-def get_payment_provider():
-    if settings.PAYMENT_SERVICE == 'stripe':
-        return StripeProvider
+class PaymentProviders(ABC):
+    providers = {
+        'stripe': StripeProvider,
+    }
+
+    @staticmethod
+    def get_default_provider():
+        return PaymentProviders.providers.get(settings.PAYMENT_SERVICE)
+
+    @staticmethod
+    def get_provider(provider):
+        return PaymentProviders.providers.get(provider)
+
+    @staticmethod
+    def add_provider(provider_name, provider_cls):
+        PaymentProviders.providers[provider_name] = provider_cls
