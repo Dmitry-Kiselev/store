@@ -74,6 +74,9 @@ class Line(models.Model):
     def line_price(self):
         return self.product.price * self.quantity
 
+    def __str__(self):
+        return '{} {}'.format(self.product.name, self.quantity)
+
 
 @receiver(post_delete, sender=Line)
 @receiver(post_save, sender=Line)
