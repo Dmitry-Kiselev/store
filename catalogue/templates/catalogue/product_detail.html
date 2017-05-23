@@ -29,26 +29,37 @@
                 </div>
 
                 <div class="col-md-7">
-                    <div class="product-title">{{ product.name }}</div>
-                    <hr>
-                    <div class="product-price">{{ product.price }}</div>
-                    {% if product.num_in_stock %}
-                        <div class="product-stock">In Stock</div>
-                    {% else %}
-                        <div class="product-stock">Out of Stock</div>
-                    {% endif %}
-                    <hr>
-                    <div class="btn-group cart">
-                        <form action="{% url 'basket_add' %}" method="post">
+                    <div class="col-md-6">
+                        <div class="product-title">{{ product.name }} ({{ product.rating|default_if_none:"0" }}/5)</div>
+                        <hr>
+                        <div class="product-price">{{ product.price }}</div>
+                        {% if product.num_in_stock %}
+                            <div class="product-stock">In Stock</div>
+                        {% else %}
+                            <div class="product-stock">Out of Stock</div>
+                        {% endif %}
+                        <hr>
+                        <div class="btn-group cart">
+                            <form action="{% url 'basket_add' %}" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="pk"
+                                       value="{{ product.pk }}" hidden/>
+                                <button type="submit" class="btn btn-success"
+                                        {% if not request.user.is_authenticated %}disabled="disabled"{% endif %}>
+                                    Add to cart
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <form id="rating_form" {% if request.user.is_authenticated %}action="{% url 'rating' pk=product.pk %}" method="post"{% endif %}>
                             {% csrf_token %}
-                            <input type="text" name="pk" value="{{ product.pk }}" hidden/>
-                            <button type="submit" class="btn btn-success"
-                                    {% if not request.user.is_authenticated %}disabled="disabled"{% endif %}>
-                            Add to cart
-                        </button>
+                            {{ rating_form }}
                         </form>
 
                     </div>
+
                 </div>
             </div>
         </div>
@@ -60,4 +71,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/catalogue_script.js' %}"></script>
 {% endblock %}

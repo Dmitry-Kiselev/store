@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from django.db.models import Avg
 from django.urls import reverse
 from django.utils import timezone
 from mptt.fields import TreeForeignKey
@@ -40,6 +42,11 @@ class Product(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'pk': self.pk})
 
+    @property
+    def rating(self):
+        return list(ProductRating.objects.filter(rated_product=self).aggregate(
+            Avg('rating')).values())[0]
+
     def __str__(self):
         return self.name
 
@@ -47,3 +54,10 @@ class Product(TimeStampedModel):
 class ExtraImage(models.Model):
     product = models.ForeignKey(Product, related_name='extra_images')
     image = models.ImageField(upload_to='products', blank=True, null=True)
+
+
+class ProductRating(TimeStampedModel):
+    rated_product = models.ForeignKey(Product, related_name='ratings',
+                                      null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    rating = models.PositiveSmallIntegerField(null=True, default=5)

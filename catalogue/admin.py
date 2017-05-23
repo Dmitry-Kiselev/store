@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Category, ExtraImage
+from .models import Product, Category, ExtraImage, ProductRating
 
 
 class ExtraImageAdmin(admin.TabularInline):
@@ -17,3 +17,8 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategotyAdmin(admin.ModelAdmin):
     list_display = ['name']
+
+
+@admin.register(ProductRating)
+class ProductRatingAdmin(admin.ModelAdmin):
+    list_display = ['created_at', 'updated_at', 'rating']

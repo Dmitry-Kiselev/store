@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from .views import IndexTemplateView, ProductListView, ProductDetailView
+from .views import IndexTemplateView, ProductListView, ProductDetailView, ProductRatingView
 
 urlpatterns = [
     url(r'^$', IndexTemplateView.as_view(), name='index'),
@@ -24,4 +24,5 @@ urlpatterns = [
         name='catalogue'),
     url(r'^product/(?P<pk>\d+)', ProductDetailView.as_view(),
         name='product_detail'),
+    url(r'catalogue/rating/(?P<pk>\d+)$', ProductRatingView.as_view(), name='rating'),
 ]
