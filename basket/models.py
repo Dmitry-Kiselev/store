@@ -1,14 +1,19 @@
+import traceback
 from decimal import Decimal
 
+import logging
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 from redis.exceptions import ConnectionError
 
 from catalogue.models import Product
 from conf.models import SiteConfig
+
+logger = logging.getLogger('django')
 
 
 class Basket(models.Model):
@@ -77,5 +82,6 @@ def update_lines_count_in_cache(sender, instance, created=None, **kwargs):
     try:
         cache.set('basket_{}'.format(instance.basket.pk),
                   count, None)
-    except ConnectionError:
-        pass
+    except ConnectionError as e:
+        logger.error('{} {}: {}'.format(timezone.now(), str(e),
+                                        traceback.format_exc()))

@@ -12,6 +12,8 @@ from payment.models import Payment
 from payment.providers import PaymentProviders
 from .models import Order
 
+logger = logging.getLogger('django')
+
 
 class OrderCreate(FormView):
     form_class = PaymentForm
@@ -40,7 +42,6 @@ class OrderCreate(FormView):
             charge_id = provider.charge(number, exp_month, exp_year, cvc,
                                         order.total_price)
         except InvalidRequestError as e:
-            logger = logging.getLogger(__name__)
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))
             charge_id = None
@@ -49,7 +50,6 @@ class OrderCreate(FormView):
         try:
             Payment.objects.create(charge_id=charge_id, order=order)
         except (DatabaseError, IntegrityError) as e:
-            logger = logging.getLogger(__name__)
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))
         messages.success(self.request, 'Success!')

@@ -5,6 +5,8 @@ from django.core.cache import cache
 from django.utils import timezone
 from redis.exceptions import ConnectionError
 
+logger = logging.getLogger('django')
+
 
 def basket_lines_count(request):
     if not request.user.is_authenticated():
@@ -14,7 +16,6 @@ def basket_lines_count(request):
         count = cache.get('basket_{}'.format(key))
     except (AttributeError, ConnectionError) as e:
         count = request.user.basket.all_lines().count()
-        logger = logging.getLogger(__name__)
         logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                         traceback.format_exc()))
 

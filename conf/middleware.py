@@ -7,6 +7,8 @@ from django.utils import timezone
 
 from conf.models import SiteConfig
 
+logger = logging.getLogger('django')
+
 
 class BaseMiddleware:
     def __init__(self, get_response):
@@ -30,6 +32,5 @@ class AdminNotifyMiddleware(BaseMiddleware):
 
 class LoggingMiddleware(BaseMiddleware):
     def process_exception(self, request, exception):
-        logger = logging.getLogger(__name__)
         logger.error('{} {}: {}'.format(timezone.now(), str(exception),
                                         traceback.format_exc()))
