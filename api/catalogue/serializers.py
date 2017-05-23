@@ -4,6 +4,7 @@ from catalogue.models import Product, Category
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    product_category = serializers.StringRelatedField()
     class Meta:
         model = Product
         fields = ['name', 'product_category', 'description', 'price', 'image']
