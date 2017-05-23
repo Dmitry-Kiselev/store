@@ -20,4 +20,4 @@ class LineViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwner,)
 
     def get_queryset(self):
-        return LineSerializer.objects.filter(user=self.request.user)
+        return Line.objects.filter(basket__user=self.request.user)
