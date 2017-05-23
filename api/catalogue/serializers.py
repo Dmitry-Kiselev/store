@@ -7,11 +7,11 @@ class ProductSerializer(serializers.ModelSerializer):
     product_category = serializers.StringRelatedField()
     class Meta:
         model = Product
-        fields = ['name', 'product_category', 'description', 'price', 'image']
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name', 'image',]
+        fields =  '__all__'
 
