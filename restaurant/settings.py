@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'extra_views',
     'widget_tweaks',
+    'rest_framework',
 
     'users',
     'conf',

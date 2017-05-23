@@ -25,3 +25,8 @@ urlpatterns = [
                   url(r'^basket/', include('basket.urls')),
                   url(r'^checkout/', include('order.urls'))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    url(r'^api/', include('api.urls',
+                          namespace='api_root')),
+]
