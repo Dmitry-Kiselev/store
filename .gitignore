@@ -4,3 +4,4 @@ static/bower_components/*
 media/*
 logs/
 local_settings.py
+products
