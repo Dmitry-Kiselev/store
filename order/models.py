@@ -56,6 +56,9 @@ class Order(TimeStampedModel):
             return self.basket.total_price - (
                 self.basket.total_price - self.discount.value)
 
+    def get_status(self):
+        return dict(Order.ORDER_STATUS.STATUS_CHOICES)[self.status]
+
 
 class DiscountQuerySet(QuerySet):
     def get_active_discounts(self):
