@@ -55,11 +55,15 @@
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" alt=" "
                                      class="img-responsive">
+                            {% else %}
+                                <img src="{% static 'img/default_product.jpg' %}"
+                                     alt=" "
+                                     class="img-responsive">
                             {% endif %}
                         </a>
 
                     </div>{% endfor %}
-                    </div>
+            </div>
 
             <div class="clearfix"></div>
         </div>
