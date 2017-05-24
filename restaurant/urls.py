@@ -29,4 +29,6 @@ urlpatterns = [
 urlpatterns += [
     url(r'^api/', include('api.urls',
                           namespace='api_root')),
+    url(r'^api/auth/',
+        include('rest_framework.urls', namespace='rest_framework'))
 ]
