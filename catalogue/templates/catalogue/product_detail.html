@@ -14,8 +14,15 @@
             <div class="container">
                 <div class="col-sm-12 col-md-5">
                     <div class="product col-md-3 service-image-left">
-                        <img id="item-display " src="{{ product.image.url }}"
-                             alt="">
+                        {% if product.image %}
+                            <img id="item-display "
+                                 src="{{ product.image.url }}"
+                                 alt="">
+                        {% else %}
+                            <img id="item-display "
+                                 src="{% static 'img/default_product.jpg' %}"
+                                 alt="">
+                        {% endif %}
                     </div>
                     <div class="container service1-items col-sm-2 col-md-2 pull-left">
 
