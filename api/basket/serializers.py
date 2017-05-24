@@ -6,6 +6,8 @@ from basket.models import Basket, Line
 class BasketSerializer(serializers.ModelSerializer):
     lines = serializers.HyperlinkedRelatedField(
         view_name='api_root:line-detail', read_only=True, many=True)
+    user = serializers.HyperlinkedRelatedField(
+        view_name='api_root:user-detail', read_only=True)
 
     class Meta:
         model = Basket
