@@ -8,7 +8,7 @@
     <form method="post" action="">
     {% csrf_token %}
     {{ form|bootstrap }}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" id="submit">Submit</button>
     </form>
 
 {% endblock %}
