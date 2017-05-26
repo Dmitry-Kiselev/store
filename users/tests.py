@@ -7,6 +7,9 @@ from django.urls import reverse
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+from catalogue.models import Product
+from order.models import Order
+
 
 @pytest.mark.django_db
 class TestUser:
@@ -16,7 +19,11 @@ class TestUser:
     def test_registration(self):
         User = get_user_model()
 
-        User.objects.filter(username='mytestuser').delete()
+        try:
+            user = User.objects.get(username='mytestuser')
+            user.delete()
+        except User.DoesNotExist:
+            pass
 
         # Opening the link we want to test
         url = 'http://127.0.0.1:8000' + reverse('sign_up')
@@ -56,7 +63,11 @@ class TestUser:
         assert TestUser.selenium.current_url != url
 
     @pytest.mark.order3
-    def test_add_to_basket(self, product):
+    def test_add_to_basket(self):
+        product = Product.objects.create(pk=4, price=1000,
+                                         name='Product',
+                                         description='Description',
+                                         num_in_stock=12)
         url = 'http://127.0.0.1:8000' + reverse('product_detail',
                                                 kwargs={'pk': product.pk})
         TestUser.selenium.get(url)
@@ -91,4 +102,4 @@ class TestUser:
 
         time.sleep(5)  # wait for redirect
 
-        assert TestUser.selenium.current_url != url
+        assert Order.objects.exists()
