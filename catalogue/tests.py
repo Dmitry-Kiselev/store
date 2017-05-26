@@ -80,5 +80,3 @@ class TestProduct:
                                                   feedback='text', user=user)
         assert feedback.status == ProductFeedback.FEEDBACK_STATUS.NEW
         assert hasattr(feedback, 'pk')
-
-

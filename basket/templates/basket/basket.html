@@ -13,7 +13,8 @@
     <h1>BASKET</h1>
     {% if formset|length %}
         {% block basket_form_main %}
-            <form action="{{ request.path }}" method="post" class="basket_summary"
+            <form action="{{ request.path }}" method="post"
+                  class="basket_summary"
                   id="basket_formset">
                 {% csrf_token %}
                 {{ formset.management_form }}
@@ -26,9 +27,14 @@
                                         {{ form.id }}
                                         {% with image=product.image %}
                                             <a href="{{ product.get_absolute_url }}">
-                                                <img class="thumbnail thumb"
-                                                     src="{{ image.url }}"
-                                                     alt="{{ product.name }}"/>
+                                                {% if product.image %}
+                                                    <img class="thumbnail thumb"
+                                                         src="{{ product.image.url }}"
+                                                         alt=""/></a>{% else %}
+                                                    <img class="thumbnail thumb"
+                                                         src="{% static 'img/default_product.jpg' %}"
+                                                         alt=""/>
+                                                {% endif %}
                                             </a>
                                         {% endwith %}
                                     </div>
@@ -77,7 +83,8 @@
             </form>
             <div class="row">
                 <div class="col-sm-12 col-md-4">
-                    <p>Total: {{ request.user.basket.total_price|floatformat:"2" }}</p>
+                    <p>
+                        Total: {{ request.user.basket.total_price|floatformat:"2" }}</p>
                     <p>Total inc
                         discount: {{ request.user.basket.total_price_inc_discount|floatformat:"2" }}</p>
                     <p>
@@ -88,7 +95,7 @@
                 </div>
             </div>
             <a class="btn-lg btn-success checkout-btn pull-right"
-               href="{% url 'checkout' %}">Checkout</a>
+               href="{% url 'checkout' %}" id="checkout_btn">Checkout</a>
         {% endblock %}
     {% else %}
         <h3>Empty</h3>

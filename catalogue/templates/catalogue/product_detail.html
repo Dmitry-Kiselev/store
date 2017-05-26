@@ -87,7 +87,7 @@
                 <form action="{% url 'feedback' pk=product.pk %}" method="post">
                     {% csrf_token %}
                     {{ feedback_form|bootstrap }}
-                    <button class="btn btn-primary" type="submit">Submit
+                    <button class="btn btn-primary" type="submit" id="submit">Submit
                     </button>
                 </form>
             </div>
