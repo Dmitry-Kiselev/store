@@ -43,7 +43,7 @@ def line(user, basket, product):
 
 @pytest.fixture
 def discount(user):
-    (discount_object, created) = Discount.objects.get_or_create(user=user,
+    (discount_object, created) = Discount.objects.get_or_create(owner=user,
                                                                 available_from=timezone.now(),
                                                                 available_until=timezone.now() + timezone.timedelta(
                                                                     days=7))
