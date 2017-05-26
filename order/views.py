@@ -2,6 +2,7 @@ import logging
 import traceback
 
 from django.contrib import messages
+from django.contrib.messages.api import MessageFailure
 from django.db import IntegrityError, DatabaseError
 from django.utils import timezone
 from django.views.generic.edit import FormView
@@ -45,12 +46,18 @@ class OrderCreate(FormView):
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))
             charge_id = None
-            messages.error(self.request,
-                           'Some error happened during checkout process. Please, try later ')
+            try:
+                messages.error(self.request,
+                               'Some error happened during checkout process. Please, try later ')
+            except MessageFailure:  # happens during test, so we do not need to add this to log
+                pass
         try:
             Payment.objects.create(charge_id=charge_id, order=order)
         except (DatabaseError, IntegrityError) as e:
             logger.error('{} {}: {}'.format(timezone.now(), str(e),
                                             traceback.format_exc()))
-        messages.success(self.request, 'Success!')
+        try:
+            messages.success(self.request, 'Success!')
+        except MessageFailure:  # happens during test, so we do not need to add this to log
+            pass
         return result

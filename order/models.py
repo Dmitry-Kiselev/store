@@ -1,3 +1,5 @@
+from _decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 from django.db.models import QuerySet
@@ -6,7 +8,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from basket.models import Basket
-from catalogue.models import TimeStampedModel
+from catalogue.models import TimeStampedModel, Product
 from .tasks import send_email
 
 
@@ -37,13 +39,13 @@ class Order(TimeStampedModel):
     def total_price(self):
         shipping_price = self.basket.shipping_price
         if not self.discount:
-            return self.basket.total_price + shipping_price
+            return self.basket.total_price + Decimal(shipping_price)
 
         if self.discount.in_percent:
             return self.basket.total_price * (
                 (100 - self.discount.value) / 100) + shipping_price
         else:
-            return self.basket.total_price - self.discount.value + shipping_price
+            return self.basket.total_price - self.discount.value + Decimal(shipping_price)
 
     @property
     def get_discount_val(self):
@@ -51,7 +53,7 @@ class Order(TimeStampedModel):
             return 0
         if self.discount.in_percent:
             return self.basket.total_price - (
-                self.basket.total_price * ((100 - self.discount.value) / 100))
+                self.basket.total_price * Decimal((100 - self.discount.value) / 100))
         else:
             return self.basket.total_price - (
                 self.basket.total_price - self.discount.value)
