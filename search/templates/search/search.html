@@ -6,13 +6,6 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-
-    <div id="products" class="row list-group">
-        {% for product in products %}
-            {% include 'catalogue/product_box.html' with product=product.object %}
-        {% endfor %}
-    </div>
-
     <form method="get" action="." class="form-horizontal">
         <input type="hidden" name="q" value="{{ search_form.q.value }}"/>
 
@@ -38,4 +31,41 @@
             </p>
         {% endif %}
     </form>
+
+
+    <div id="products" class="row list-group">
+        {% for product in products %}
+            {% include 'catalogue/product_box.html' with product=product.object %}
+        {% endfor %}
+    </div>
+
+    {% if paginator.num_pages > 1 %}
+        <div>
+            <ul class="pager">
+                {% if page_obj.has_previous %}
+                    <li class="previous"><a
+                            href="?page={{ page_obj.previous_page_number }}"
+                            id="previous"
+                            data-page-num="{{ page_obj.previous_page_number }}">{% trans "previous" %}</a>
+                    </li>
+                {% endif %}
+                <li class="current">
+                    {% blocktrans with page_num=page_obj.number total_pages=paginator.num_pages %}
+                        Page {{ page_num }} of {{ total_pages }}
+                    {% endblocktrans %}
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="next"><a
+                            href="?page={{ page_obj.next_page_number }}"
+                            id="next"
+                            data-page-num="{{ page_obj.next_page_number }}">{% trans "next" %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}
