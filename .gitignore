@@ -5,3 +5,6 @@ media/*
 logs/
 local_settings.py
 products
+.cache
+driver.log
+geckodriver.log

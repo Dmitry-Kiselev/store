@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'extra_views',
     'widget_tweaks',
     'rest_framework',
+    'haystack',
 
     'users',
     'conf',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'order',
     'payment',
     'promotion',
+    'search',
 
 
 ]
@@ -83,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'basket.context_processors.basket_lines_count',
+                'search.processors.search_form',
             ],
         },
     },
@@ -189,6 +192,14 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+    },
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
     },
 }
 
