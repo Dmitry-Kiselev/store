@@ -12,8 +12,7 @@
         {% if paginator.count %}
             {% if paginator.num_pages > 1 %}
                 {% blocktrans with start=page.start_index end=page.end_index num_results=paginator.count %}
-                    Found <strong>{{ num_results }}</strong> results, showing
-                    <strong>{{ start }}</strong> to <strong>{{ end }}</strong>.
+                    Found <strong>{{ num_results }}</strong> results.
                 {% endblocktrans %}
             {% else %}
                 {% blocktrans count num_results=paginator.count %}
