@@ -5,10 +5,6 @@
 
 {% block title %}Search{% endblock %}
 
-{% block extrastyle %}
-    <link href="{% static 'css/catalogue_style.css' %}">
-{% endblock %}
-
 {% block content %}
 
     <div id="products" class="row list-group">
@@ -42,8 +38,4 @@
             </p>
         {% endif %}
     </form>
-{% endblock %}
-
-{% block extrajs %}
-    <script src="{% static 'js/catalogue_script.js' %}"></script>
 {% endblock %}
