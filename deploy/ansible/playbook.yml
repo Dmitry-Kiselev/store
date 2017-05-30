@@ -107,6 +107,12 @@
               backup=yes
       notify: restart nginx
 
+
+    - name: Create symlink to nginx config
+      command: ln -s /etc/nginx/sites-available/{{ application_name }} /etc/nginx/sites-enabled/{{ application_name }}
+      notify: restart nginx
+
+
     - name: Create the supervisor configuration file
       template: src=supervisor/{{ application_name }}.conf.j2
               dest=/etc/supervisor/conf.d/{{ application_name }}.conf
