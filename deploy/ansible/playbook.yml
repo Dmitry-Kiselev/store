@@ -62,6 +62,12 @@
       postgresql_privs: db={{dbname}} role=PUBLIC type=database priv=ALL state=absent
 
 
+    - name: Clone/pull project repo
+      git: repo={{ project_repo }} dest={{ install_root }}/{{ application_name }} accept_hostkey=yes  key_file={{ ssh_private_key }}
+      notify:
+      - restart gunicorn
+
+
     - name: Install Virtual env
       apt: name=python-virtualenv state=latest
 
@@ -70,15 +76,6 @@
       pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }}
       notify:
       - restart gunicorn
-
-
-    - name: Setup the Git repo
-      git: repo={{ git_repo }}
-           version={{ git_branch }}
-           dest={{ project_path }}
-           accept_hostkey=yes
-      when: setup_git_repo is defined and setup_git_repo
-      tags: git
 
 
     - name: Run Django database migrations
