@@ -9,7 +9,7 @@ from .views import ProductDetailView
 
 @pytest.fixture
 def product():
-    (product_object, created) = Product.objects.get_or_create(
+    (product_object, _created) = Product.objects.get_or_create(
         name='Product',
         description="description",
         price=100, num_in_stock=1)
@@ -19,7 +19,7 @@ def product():
 @pytest.fixture
 def user():
     user_model = get_user_model()
-    (user_object, created) = user_model.objects.get_or_create(
+    (user_object, _created) = user_model.objects.get_or_create(
         username='test_user')
     return user_object
 
@@ -40,7 +40,7 @@ class TestProduct:
         assert hasattr(product, 'pk')
 
     def test_product_view(self, rf):
-        (product_object, created) = Product.objects.get_or_create(
+        (product_object, _created) = Product.objects.get_or_create(
             name='Product',
             description="description",
             price=100, num_in_stock=1)
@@ -59,14 +59,12 @@ class TestProduct:
         assert product.rating == 3
 
     def test_product_rating_anonymous(self, product):
-        exception_happened = False
-        try:
+        with pytest.raises(ValueError) as exc_info:
             ProductRating.objects.create(rated_product=product,
                                          user=AnonymousUser(), rating=5)
-        except ValueError:
-            exception_happened = True
-
-        assert exception_happened
+        exception_raised = exc_info.value
+        if exception_raised:
+            assert False
 
     def test_product_anonymous_feedback(self, product):
         feedback = ProductFeedback.objects.create(feedback_product=product,

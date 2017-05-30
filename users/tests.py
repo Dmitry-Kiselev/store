@@ -1,22 +1,34 @@
 import datetime
-import time
 
-import pytest
 from django.contrib.auth import get_user_model
+from django.test import LiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 from catalogue.models import Product
-from order.models import Order
 
 
-@pytest.mark.django_db
-class TestUser:
-    selenium = webdriver.Firefox()
+class TestUser(LiveServerTestCase):
+    def setUp(self):
+        self.selenium = webdriver.Firefox()
+        super(TestUser, self).setUp()
 
-    @pytest.mark.order1
-    def test_registration(self):
+    def tearDown(self):
+        self.selenium.quit()
+        super(TestUser, self).tearDown()
+
+    def test_full(self):
+        self._test_registration()
+        self._test_login()
+        self._test_add_to_basket()
+        self._test_make_order()
+
+    def _test_registration(self):
+
+        selenium = self.selenium
+
         User = get_user_model()
 
         try:
@@ -27,13 +39,14 @@ class TestUser:
 
         # Opening the link we want to test
         url = 'http://127.0.0.1:8000' + reverse('sign_up')
-        TestUser.selenium.get(url)
+        index_url = 'http://127.0.0.1:8000' + reverse('index')
+        selenium.get(url)
         # find the form element
-        username = TestUser.selenium.find_element_by_id('id_username')
-        password1 = TestUser.selenium.find_element_by_id('id_password1')
-        password2 = TestUser.selenium.find_element_by_id('id_password2')
+        username = selenium.find_element_by_id('id_username')
+        password1 = selenium.find_element_by_id('id_password1')
+        password2 = selenium.find_element_by_id('id_password2')
 
-        submit = TestUser.selenium.find_element_by_id('submit')
+        submit = selenium.find_element_by_id('submit')
 
         username.send_keys('mytestuser')
         password1.send_keys('123456qwerty')
@@ -41,55 +54,66 @@ class TestUser:
 
         submit.send_keys(Keys.RETURN)
 
-        time.sleep(5)  # wait for redirect
+        wait = WebDriverWait(selenium, 10)  # wait for redirect
+        wait.until(lambda
+                       driver: selenium.current_url != url)
 
-        assert TestUser.selenium.current_url != url
+        assert selenium.current_url != url
 
-    @pytest.mark.order2
-    def test_login(self):
+    def _test_login(self):
+
+        selenium = self.selenium
         # Opening the link we want to test
         url = 'http://127.0.0.1:8000' + reverse('login')
-        TestUser.selenium.get(url)
+        selenium.get(url)
         # find the form element
-        username = TestUser.selenium.find_element_by_id('id_username')
-        password = TestUser.selenium.find_element_by_id('id_password')
-        submit = TestUser.selenium.find_element_by_id('submit')
+        username = selenium.find_element_by_id('id_username')
+        password = selenium.find_element_by_id('id_password')
+        submit = selenium.find_element_by_id('submit')
         username.send_keys('mytestuser')
         password.send_keys('123456qwerty')
         submit.send_keys(Keys.RETURN)
 
-        time.sleep(5)  # wait for redirect
+        wait = WebDriverWait(selenium, 10)  # wait for redirect
+        wait.until(lambda
+                       driver: selenium.current_url != url)
 
-        assert TestUser.selenium.current_url != url
+        assert selenium.current_url != url
 
-    @pytest.mark.order3
-    def test_add_to_basket(self):
+    def _test_add_to_basket(self):
+
+        selenium = self.selenium
+
         product = Product.objects.create(pk=4, price=1000,
                                          name='Product',
                                          description='Description',
                                          num_in_stock=12)
         url = 'http://127.0.0.1:8000' + reverse('product_detail',
                                                 kwargs={'pk': product.pk})
-        TestUser.selenium.get(url)
-        submit = TestUser.selenium.find_element_by_id('submit')
+        selenium.get(url)
+        submit = selenium.find_element_by_id('submit')
         submit.send_keys(Keys.RETURN)
 
-        time.sleep(5)  # wait for redirect
+        wait = WebDriverWait(selenium, 10)  # wait for redirect
+        wait.until(lambda
+                       driver: selenium.current_url != url)
 
-        assert TestUser.selenium.current_url != url
+        assert selenium.current_url != url
 
-    @pytest.mark.order4
-    def test_make_order(self):
+    def _test_make_order(self):
+
+        selenium = self.selenium
+
         url = 'http://127.0.0.1:8000' + reverse('checkout')
-        TestUser.selenium.get(url)
+        selenium.get(url)
 
-        number = TestUser.selenium.find_element_by_id('id_number')
-        expiration_month = TestUser.selenium.find_element_by_id(
+        number = selenium.find_element_by_id('id_number')
+        expiration_month = selenium.find_element_by_id(
             'id_expiration_month')
-        expiration_year = TestUser.selenium.find_element_by_id(
+        expiration_year = selenium.find_element_by_id(
             'id_expiration_year')
-        cvc = TestUser.selenium.find_element_by_id('id_cvc')
-        submit = TestUser.selenium.find_element_by_id('submit')
+        cvc = selenium.find_element_by_id('id_cvc')
+        submit = selenium.find_element_by_id('submit')
 
         exp = datetime.date.today() + datetime.timedelta(days=365)
 
@@ -100,6 +124,8 @@ class TestUser:
 
         submit.send_keys(Keys.RETURN)
 
-        time.sleep(5)  # wait for redirect
+        wait = WebDriverWait(selenium, 10)  # wait for redirect
+        wait.until(lambda
+                       driver: selenium.current_url != url)
 
-        assert Order.objects.exists()
+        assert selenium.current_url != url
