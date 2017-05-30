@@ -110,9 +110,17 @@
               backup=yes
       notify: restart nginx
 
+    - name: Create the supervisor configuration file
+      template: src=supervisor/{{ application_name }}.conf.j2
+              dest=/etc/supervisor/conf.d/{{ application_name }}.conf
+              backup=yes
+      notify:
+        - reread supervisor
+        - update supervisor
 
-    - name: install redis
-      apt: name=redis-server state=latest
+
+    #- name: install redis
+    #  apt: name=redis-server state=latest
 
 
 
@@ -122,3 +130,9 @@
 
   - name: restart gunicorn
     service: name=gunicorn state=restarted
+
+  - name: reread supervisor
+    service: name=supervisorctl state=present
+
+  - name: update supervisor
+    service: name=supervisorctl state=restarted
