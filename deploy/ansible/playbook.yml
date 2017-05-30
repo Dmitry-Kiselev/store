@@ -1,0 +1,124 @@
+---
+- hosts: all
+  become: true
+
+  vars_files:
+    - vars.yml
+
+
+
+  tasks:
+    - name: Update apt
+      apt: update_cache=yes
+      tags: packages
+
+    - name: Install base packages
+      apt: name={{ item }} state=installed
+      with_items:
+        - build-essential
+        - acl
+        - ntp
+        - htop
+        - git
+        - libpq-dev
+        - python-dev
+        - python-pip
+        - python-pycurl
+        - supervisor
+        - gunicorn
+      tags: packages
+
+    - name: Install Python 3 and related packages
+      apt: name={{ item }} state=latest
+      with_items:
+        - python3
+        - python3-pip
+
+      tags: packages
+
+
+    - name: Install PostgreSQL
+      apt: name={{item}}
+      with_items:
+        - postgresql
+        - libpq-dev
+        - python-psycopg2
+      tags: packages
+
+    - name: ensure database is created
+      become_user: postgres
+      postgresql_db: name={{dbname}}
+
+    - name: ensure user has access to database
+      become_user: postgres
+      postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+    - name: ensure user does not have unnecessary privilege
+      become_user: postgres
+      postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+
+    - name: ensure no other user can access the database
+      become_user: postgres
+      postgresql_privs: db={{dbname}} role=PUBLIC type=database priv=ALL state=absent
+
+
+    - name: Install Virtual env
+      apt: name=python-virtualenv state=latest
+
+
+    - name: Install packages required by the Django app inside virtualenv
+      pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }}
+      notify:
+      - restart gunicorn
+
+
+    - name: Setup the Git repo
+      git: repo={{ git_repo }}
+           version={{ git_branch }}
+           dest={{ project_path }}
+           accept_hostkey=yes
+      when: setup_git_repo is defined and setup_git_repo
+      tags: git
+
+
+    - name: Run Django database migrations
+      django_manage:
+          command: migrate
+          app_path: "{{ project_path }}"
+          virtualenv: "{{ virtualenv_path }}"
+          settings: "{{ django_settings_file }}"
+      when: run_django_db_migrations is defined and run_django_db_migrations
+      tags: django.migrate
+
+    - name: Run Django collectstatic
+      django_manage:
+          command: collectstatic
+          app_path: "{{ project_path }}"
+          virtualenv: "{{ virtualenv_path }}"
+          settings: "{{ django_settings_file }}"
+      when: run_django_collectstatic is defined and run_django_collectstatic
+      tags: django.collectstatic
+
+
+    - name: Install Nginx
+      apt: name=nginx state=installed
+      tags: packages
+
+    - name: Create the Nginx configuration file
+      template: src={{ application_name }}.j2
+              dest=/etc/nginx/sites-available/{{ application_name }}
+              backup=yes
+      notify: restart nginx
+
+
+    - name: install redis
+      apt: name=redis-server state=latest
+
+
+
+  handlers:
+  - name: restart nginx
+    service: name=nginx state=restarted enabled=yes
+
+  - name: restart gunicorn
+    service: name=gunicorn state=restarted

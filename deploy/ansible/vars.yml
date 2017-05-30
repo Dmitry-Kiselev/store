@@ -1,0 +1,12 @@
+application_name: restaurant
+project_path: /home/user/Projects/restaurant
+wsgi_module: restaurant.wsgi
+project_repo: git@github.com:Dmitry-Kiselev/store.git
+git_branch: master
+ssh_private_key: ~/.ssh/id_rsa
+dbname: restaurant
+dbuser: restaurant
+dbpassword: restaurant
+virtualenv_path: /home/user/Projects/restaurant/env
+requirements_file: /home/user/Projects/restaurant/restaurant/requirements.txt
+django_settings_file: /home/user/Projects/restaurant/restaurant/restaurant/settings.py
