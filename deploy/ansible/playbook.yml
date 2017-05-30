@@ -119,8 +119,8 @@
         - update supervisor
 
 
-    #- name: install redis
-    #  apt: name=redis-server state=latest
+    - name: install redis
+      apt: name=redis-server state=latest
 
 
 
