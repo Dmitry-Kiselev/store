@@ -26,7 +26,12 @@
         - python-pycurl
         - supervisor
         - gunicorn
+
       tags: packages
+
+    - name: Install packages based on bower.json.
+      bower:
+        path: "{{ bower_json }}"
 
     - name: Install Python 3 and related packages
       apt: name={{ item }} state=latest
