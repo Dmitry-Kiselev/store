@@ -11,4 +11,4 @@ virtualenv_path: /home/user/Projects/restaurant/env
 requirements_file: /home/user/Projects/restaurant/restaurant/requirements.txt
 django_settings_file: /home/user/Projects/restaurant/restaurant/restaurant/settings.py
 install_root: /home/user/Projects/restaurant/
-bower_json: /home/user/temp/restaurant/static
+bower_json: /home/user/Projects/restaurant/static
