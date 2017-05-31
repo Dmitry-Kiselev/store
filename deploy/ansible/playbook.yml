@@ -107,7 +107,6 @@
           app_path: "{{ project_path }}"
           virtualenv: "{{ virtualenv_path }}"
 
-      when: run_django_db_migrations is defined and run_django_db_migrations
       tags: django.migrate
 
     - name: Run Django collectstatic
