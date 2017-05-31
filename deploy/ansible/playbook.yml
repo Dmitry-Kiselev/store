@@ -101,7 +101,7 @@
           command: migrate
           app_path: "{{ project_path }}"
           virtualenv: "{{ virtualenv_path }}"
-          settings: "{{ django_settings_file }}"
+
       when: run_django_db_migrations is defined and run_django_db_migrations
       tags: django.migrate
 
@@ -110,7 +110,6 @@
           command: collectstatic
           app_path: "{{ project_path }}"
           virtualenv: "{{ virtualenv_path }}"
-          settings: "{{ django_settings_file }}"
       tags: django.collectstatic
 
 

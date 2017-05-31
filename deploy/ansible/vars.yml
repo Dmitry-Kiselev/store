@@ -3,7 +3,7 @@ project_path: /home/user/Projects/restaurant
 wsgi_module: restaurant.wsgi
 project_repo: git@github.com:Dmitry-Kiselev/store.git
 git_branch: master
-ssh_private_key: ~/.ssh/id_rsa
+ssh_private_key: /home/user/.ssh/id_rsa
 dbname: restaurant
 dbuser: restaurant
 dbpassword: restaurant

@@ -17,11 +17,11 @@ server {
     error_log  {{ install_root }}{{ application_name }}/logs/nginx-error.log;
 
     location /static/ {
-        alias   {{ install_root }}{{ application_name }}/static/;
+        alias   {{ install_root }}static/;
     }
 
     location /media/ {
-        alias   {{ install_root }}{{ application_name }}/media/;
+        alias   {{ install_root }}media/;
     }
 
     location / {
