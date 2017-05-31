@@ -2,9 +2,9 @@
 - hosts: all
   become: true
 
+
   vars_files:
     - vars.yml
-
 
 
   tasks:
@@ -36,7 +36,6 @@
 
       tags: packages
 
-
     - name: Install PostgreSQL
       apt: name={{item}}
       with_items:
@@ -61,22 +60,41 @@
       become_user: postgres
       postgresql_privs: db={{dbname}} role=PUBLIC type=database priv=ALL state=absent
 
-
     - name: Clone/pull project repo
       git: repo={{ project_repo }} dest={{ install_root }}/{{ application_name }} accept_hostkey=yes  key_file={{ ssh_private_key }}
       notify:
       - restart gunicorn
 
+    - name: create server log dir
+      file: path={{ install_root }}{{ application_name }}/logs state=directory
+
+    - name: create server log file
+      file: path={{ install_root }}{{ application_name }}/logs/server.log state=touch
+
+    - name: Create gunicorn start script
+      template: src=templates/gunicorn/gunicorn_start.j2
+              dest={{ install_root }}{{ application_name }}/deploy/gunicorn_start
+              backup=yes mode=0755
+
+    - name: Create socket dir
+      file: path={{ install_root }}/run state=directory mode=0755
+
+    - name: Create nginx log directory
+      file: path={{ install_root }}/logs state=directory
+
+    - name: Create nginx log files
+      file: path={{ install_root }}/logs/{{ item }} state=touch
+      with_items:
+        - nginx-access.log
+        - nginx-error.log
 
     - name: Install Virtual env
       apt: name=python-virtualenv state=latest
-
 
     - name: Install packages required by the Django app inside virtualenv
       pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }}
       notify:
       - restart gunicorn
-
 
     - name: Run Django database migrations
       django_manage:
@@ -93,8 +111,26 @@
           app_path: "{{ project_path }}"
           virtualenv: "{{ virtualenv_path }}"
           settings: "{{ django_settings_file }}"
-      when: run_django_collectstatic is defined and run_django_collectstatic
       tags: django.collectstatic
+
+
+    - name: create supervisor log file
+      file: path={{ install_root }}/logs/gunicorn_supervisor.log state=touch
+
+
+    - name: Create the supervisor configuration file
+      template: src=templates/supervisor/{{ application_name }}.conf.j2
+              dest=/etc/supervisor/conf.d/{{ application_name }}.conf
+              backup=yes
+      notify:
+        - reread supervisor
+        - update supervisor
+
+    - name: Run supervisor update command
+      command: supervisorctl update
+
+    - name: start project using supervisor
+      command: supervisorctl start {{ application_name }}
 
 
     - name: Install Nginx
@@ -102,25 +138,15 @@
       tags: packages
 
     - name: Create the Nginx configuration file
-      template: src={{ application_name }}.j2
+      template: src=templates/nginx/{{ application_name }}.j2
               dest=/etc/nginx/sites-available/{{ application_name }}
               backup=yes
-      notify: restart nginx
-
+      notify:
+        - restart nginx
 
     - name: Create symlink to nginx config
       command: ln -s /etc/nginx/sites-available/{{ application_name }} /etc/nginx/sites-enabled/{{ application_name }}
       notify: restart nginx
-
-
-    - name: Create the supervisor configuration file
-      template: src=supervisor/{{ application_name }}.conf.j2
-              dest=/etc/supervisor/conf.d/{{ application_name }}.conf
-              backup=yes
-      notify:
-        - reread supervisor
-        - update supervisor
-
 
     - name: install redis
       apt: name=redis-server state=latest
@@ -128,6 +154,10 @@
 
 
   handlers:
+
+  - name: start project using supervisor
+    command: supervisorctl start {{ application_name }}
+
   - name: restart nginx
     service: name=nginx state=restarted enabled=yes
 
