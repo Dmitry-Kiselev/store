@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'basket.context_processors.basket_lines_count',
                 'search.processors.search_form',
+                'conf.context_processors.general_site_info_processor',
             ],
         },
     },

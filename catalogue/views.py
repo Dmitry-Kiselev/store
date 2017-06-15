@@ -9,13 +9,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from catalogue.models import Product, Category, ProductRating
-from conf.views import SiteInfoContextMixin
 from .forms import ProductRatingForm, ProductFeedbackForm
 
 logger = logging.getLogger('django')
 
 
-class IndexTemplateView(SiteInfoContextMixin, TemplateView):
+class IndexTemplateView(TemplateView):
     template_name = 'catalogue/index.html'
 
     def get_context_data(self, **kwargs):
@@ -25,7 +24,7 @@ class IndexTemplateView(SiteInfoContextMixin, TemplateView):
         return context
 
 
-class ProductListView(SiteInfoContextMixin, ListView):
+class ProductListView(ListView):
     template_name = 'catalogue/catalogue.html'
     paginate_by = 12
     context_object_name = 'products'
