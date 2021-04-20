@@ -22,7 +22,7 @@ olefile==0.44
 packaging==16.8
 Pillow==4.1.1
 psycopg2==2.7.1
-py==1.4.33
+py==1.10.0
 pyelasticsearch==1.4
 Pygments==2.2.0
 pyparsing==2.2.0
